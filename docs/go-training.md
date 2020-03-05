@@ -51,6 +51,8 @@ img[alt~="center"] {
 Laurence de Jong
 Software Engineer
 
+ldej.github.io/go-training
+
 ---
 ![bg left:30%](images/wibautstraat2.jpg)
 
