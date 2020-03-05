@@ -1,4 +1,5 @@
 ---
+permalink: /index.html
 title: Learning Go
 description: A hands-on training for the Go programming language
 theme: gaia
