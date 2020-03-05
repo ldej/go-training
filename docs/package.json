@@ -1,0 +1,20 @@
+{
+  "name": "presentation",
+  "version": "1.0.0",
+  "description": "The presentation for the go-training",
+  "main": "index.js",
+  "scripts": {
+    "start": "marp --html --watch go-training.md -o index.html",
+    "build": "npm run build:html && npm run build:pdf && npm run build:pptx",
+    "build:html": "marp --allow-local-files --html go-training.md -o index.html",
+    "build:pdf": "marp --allow-local-files --html go-training.md -o go-training.pdf",
+    "build:pptx": "marp --allow-local-files --html go-training.md -o go-training.pptx"
+  },
+  "author": "Laurence de Jong",
+  "license": "ISC",
+  "dependencies": {
+    "@marp-team/marp-cli": "^0.17.1",
+    "@marp-team/marp-core": "^1.0.1",
+    "@marp-team/marpit": "^1.5.0"
+  }
+}
