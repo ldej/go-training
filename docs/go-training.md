@@ -15,6 +15,11 @@ html: true
 section {
     font-size: 1.6em;
 }
+
+section pre>code {
+    background: #222a2d;
+}
+
 section.default h6 {
     text-align: right;
     position: relative;
@@ -37,21 +42,69 @@ ul {
     margin-block-end: 0.5em;
 }
 img[alt~="center"] {
-  display: block;
-  margin: 0 auto;
+    display: block;
+    margin: 0 auto;
 }
+img[alt~="right"] {
+    display: block;
+    margin-left: auto;
+}
+img[alt~=fixed-right] {
+    position: absolute;
+    right: 100px;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+}
+
+section.centered-comment {
+    height: 100%;
+    text-align: center;
+    font-size: 3em;
+    padding-top: 200px;
+}
+section.centered-comment blockquote {
+}
+
+section.front {
+    display: -webkit-box;
+    display: flex;
+    --webkit-box-orient: vertical;
+    --webkit-box-direction: normal;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    --webkit-box-pack: center;
+    justify-content: center;
+    padding-right: 25%;
+}
+div.front-details {
+    text-align: center;
+    margin-top: 60px;
+    width: 50%;
+}
+
 </style>
 
-<!-- _class: lead -->
+<!-- use ![right](image.png) to align right -->
+<!-- use ![center](image.png) to horizontally and vertically center -->
+
+<!-- _class: front -->
 
 # Learning Go
 
-![bg right:40%](images/wibautstraat1.jpg)
+![bg](images/xebia-front-diagnal.png)
 
-Laurence de Jong
+<div class="front-details">
+
+![width:200px](images/ldejong.jpeg)
+
+__Laurence de Jong__
 Software Engineer
 
-ldej.github.io/go-training
+![width:22px](images/linkedin.svg) /in/laurencedejong
+![width:22px](images/github.png) /ldej
+
+</div>
 
 ---
 ![bg left:30%](images/wibautstraat2.jpg)
@@ -67,6 +120,8 @@ Ticketing, trading, inventory, retail, healthcare
 Go in production:
  - Blokker (May 2017 - May 2018)
  - Duxxie (June 2018 - January 2020)
+ - IDFC Bank (July 2020 - January 2020)
+ - Action (Februari 2021 - May 2021)
 
 ---
 <!-- _class: lead -->
@@ -257,7 +312,7 @@ $ export PATH=${PATH}:${GOPATH}/bin       # in ~/.bash_profile
 $ ${GOPATH}/
 ├── bin # binaries
 ├── pkg # libraries
-└── src # executables
+└── src # source
 ```
 
 ---
@@ -525,7 +580,7 @@ func convertInternal(arg in ) string { // private
 Can return multiple values
 ```go
 func swap(x, y string) (string, string) { 
- return y, x 
+    return y, x 
 }
 ```
 (More on functions later)
@@ -664,7 +719,7 @@ func (p *Patient) MarkHealthy() { // has side effect
 
 func main() {
     dada := Patient{
-        Name:     "Inder",
+        Name:     "Akshay",
         YearBorn: 1940,
     }
     log.Printf("high-risk: %+v\n", opa.HasHighRiskOnDisease())
@@ -678,9 +733,9 @@ func main() {
 # Struct methods: value or pointer?
 
 > 1. Use the same receiver type for all your methods. This isn't always feasible, but try to.
-> 2. Methods defines a behavior of a type; if the method uses a state (updates / mutates) use pointer receiver.
-> 3. If a method don't mutate state, use value receiver.
-> 4. Functions operates on values; functions should not depend on the state of a type.
+> 2. Method defines a behavior of a type; if the method uses a state (updates / mutates) use pointer receiver.
+> 3. If a method doesn't mutate state, use value receiver.
+> 4. Function operates on values; functions should not depend on the state of a type.
 
 <!-- _footer: Source: https://dev.to/chen/gos-method-receiver-pointer-vs-value-1kl8 -->
 
@@ -692,14 +747,14 @@ func main() {
 ```go
 var ho *HugeObject = &HugeObject{} // ho := &HugeObject{}
 ho := new(HugeObject)
-insuranceService.CalculateRisk( hu )
+insuranceService.CalculateRisk(hu)
 ```
 - For methods that mutate data
 ```go
-func (p Patient)MarkDeceased() { // won't adjust patient
+func (p Patient) MarkDeceased() { // won't adjust patient
   p.Deceased = true
 }
-func (p *Patient)MarkDeceased() { // will work
+func (p *Patient) MarkDeceased() { // will work
   p.Deceased = true
 }
 ```
