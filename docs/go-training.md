@@ -378,6 +378,8 @@ func main() {
 }
 ```
 ```shell script
+$ go mod init <projectname> # For example: github.com/<user>/<project>
+$ go mod tidy
 $ go fmt             # standard formatter (goimports is even better)
 
 $ go run first.go    # compiles and runs right away
@@ -835,6 +837,7 @@ If you can't think of anything:
 ---
 
 # Containers
+
 - array and slice
 - map
 
