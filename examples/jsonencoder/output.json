@@ -1,0 +1,19 @@
+{
+  "name": "",
+  "age": 0,
+  "family": [
+    "father",
+    "mother"
+  ],
+  "skills": [
+    {
+      "name": "Programming"
+    },
+    {
+      "name": "Teaching"
+    },
+    {
+      "name": "json"
+    }
+  ]
+}

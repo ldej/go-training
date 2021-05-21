@@ -1,0 +1,15 @@
+{
+  "anything": "Laurence",
+  "family": [
+    "father",
+    "mother"
+  ],
+  "skills": [
+    {
+      "name": "Programming"
+    },
+    {
+      "name": "Teaching"
+    }
+  ]
+}
