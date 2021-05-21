@@ -7,23 +7,23 @@ import (
 
 func TestValidateEmail(t *testing.T) {
 	tests := []struct {
-		input string
-		want  bool
+		input   string
+		isValid bool
 	}{
-		{input: "", want: false},
-		{input: "@", want: false},
-		{input: "@xebia", want: false},
-		{input: "l/dejong@xebia..com", want: false},
-		{input: "ldejong@xebia..com", want: false},
-		{input: "ldejong@xebia", want: true},
-		{input: "ldejong@xebia.com", want: true},
+		{input: "", isValid: false},
+		{input: "@", isValid: false},
+		{input: "@xebia", isValid: false},
+		{input: "l/dejong@xebia..com", isValid: false},
+		{input: "ldejong@xebia..com", isValid: false},
+		{input: "ldejong@xebia", isValid: true},
+		{input: "ldejong@xebia.com", isValid: true},
 	}
 
 	for _, tc := range tests {
 		t.Run(fmt.Sprintf("Testcase: %s", tc.input), func(t *testing.T) {
 			got := IsValidEmailAddress(tc.input)
-			if got != tc.want {
-				t.Fatalf("expected: %v, got: %v", tc.want, got)
+			if got != tc.isValid {
+				t.Fatalf("expected: %v, got: %v", tc.isValid, got)
 			}
 		})
 	}
