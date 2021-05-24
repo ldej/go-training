@@ -41,7 +41,7 @@ func (cl *Client) GetThingOnUUID(thingUUID string) (*GetThingResponse, error) {
 
 func main() {
 	client := Client{Hostname: "https://api-ldej-nl.el.r.appspot.com"}
-	resp, err := client.GetThingOnUUID("4ff83452-5878-11ea-bc7e-914aa98404f8")
+	resp, err := client.GetThingOnUUID("19b19046-5a1a-43c6-a4fa-6020b0810996")
 	if err != nil {
 		log.Fatal(err)
 		return
