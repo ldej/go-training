@@ -9,11 +9,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetPatientByUIDSuccess(t *testing.T) {
+func TestThingByUIDSuccess(t *testing.T) {
 	// create server simulator
 	testServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "GET", r.Method)
-		assert.Equal(t, "/api/v1/patients/123", r.URL.RequestURI())
+		assert.Equal(t, "/thing/123", r.URL.RequestURI())
 
 		returnSuccessResponse(t, w, r)
 	}))
@@ -21,21 +21,21 @@ func TestGetPatientByUIDSuccess(t *testing.T) {
 
 	// perform request
 	client := &Client{Hostname: testServer.URL}
-	resp, err := client.GetPatientOnUID("123")
+	resp, err := client.GetThingOnUUID("123")
 
 	// validate output as return from fake server
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
-	assert.Equal(t, "Laurence", resp.FullName)
-	assert.Equal(t, []string{"cheese"}, resp.Allergies)
+	assert.Equal(t, "Laurence", resp.Name)
+	assert.Equal(t, "cheese", resp.Value)
 }
 
 func returnSuccessResponse(t *testing.T, w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	resp := GetPatientResponse{
-		FullName:  "Laurence",
-		Allergies: []string{"cheese"},
+	resp := GetThingResponse{
+		Name:  "Laurence",
+		Value: "cheese",
 	}
 
 	err := json.NewEncoder(w).Encode(resp)
@@ -44,7 +44,7 @@ func returnSuccessResponse(t *testing.T, w http.ResponseWriter, r *http.Request)
 	}
 }
 
-func TestGetPatientByUIDError(t *testing.T) {
+func TestGetThingByUUIDError(t *testing.T) {
 	// create server simulator
 	testServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
@@ -53,7 +53,7 @@ func TestGetPatientByUIDError(t *testing.T) {
 
 	// perform request
 	client := &Client{Hostname: testServer.URL}
-	_, err := client.GetPatientOnUID("123")
+	_, err := client.GetThingOnUUID("123")
 
 	// validate output as return from fake server
 	assert.Error(t, err)

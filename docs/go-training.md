@@ -1605,33 +1605,35 @@ Standard library provides API
 
 ###### example/httpClient/httpClient.go
 ```go
-type GetPatientResponse struct {
-	UID       string   `json:"uid"`
-	FullName  string   `json:"full_name"`
-	Allergies []string `json:"allergies"`
+type GetThingResponse struct {
+    UUID    string    `json:"uuid"`
+    Name    string    `json:"name"`
+    Value   string    `json:"value"`
+    Updated time.Time `json:"updated"`
+    Created time.Time `json:"created"`
 }
 
 type Client struct {
-	Hostname string
+    Hostname string
 }
 
-func (cl *Client) GetPatientOnUID(patientUid string) (*GetPatientResponse, error) {
-	client := http.Client{}
-	httpResponse, err := client.Get(fmt.Sprintf("%s/api/v1/patients/%s", cl.Hostname, patientUid))
-	if err != nil {
-		return nil, err
-	}
-	defer httpResponse.Body.Close()
+func (cl *Client) GetThingOnUUID(thingUUID string) (*GetThingResponse, error) {
+    client := http.Client{}
+    httpResponse, err := client.Get(fmt.Sprintf("%s/thing/%s", cl.Hostname, thingUUID))
+    if err != nil {
+    	return nil, err
+    }
+    defer httpResponse.Body.Close()
 
-	if httpResponse.StatusCode != 200 {
-		return nil, fmt.Errorf("error fetching patient: http-status %d", httpResponse.StatusCode)
-	}
-	var resp GetPatientResponse
-	err = json.NewDecoder(httpResponse.Body).Decode(&resp)
-	if err != nil {
-		return nil, err
-	}
-	return &resp, nil
+    if httpResponse.StatusCode != 200 {
+        return nil, fmt.Errorf("error fetching thing: http-status %d", httpResponse.StatusCode)
+    }
+    var resp GetThingResponse
+    err = json.NewDecoder(httpResponse.Body).Decode(&resp)
+    if err != nil {
+        return nil, err
+    }
+    return &resp, nil
 }
 ```
 
@@ -1639,16 +1641,16 @@ func (cl *Client) GetPatientOnUID(patientUid string) (*GetPatientResponse, error
 
 # Exercise 9: HTTP client POST
 
-- Create a patient using HTTP POST to https://patient-store.appspot.com/api/v1/patients
+- Create a thing using HTTP POST to https://api-ldej-nl.el.r.appspot.com/thing
 
 ```shell script
 $ curl -X POST \
-    --data '{"full_name": "Laurence", "allergies": ["coffee"]}' \
+    --data '{"name": "Laurence", "value": "coffee"}' \
     -H 'Content-Type: application/json' \
     -H 'Accept: application/json' \
-    https://patient-store.appspot.com/api/v1/patients
+    https://api-ldej-nl.el.r.appspot.com/thing
 ```
-- Play around at https://patient-store.appspot.com/swagger/index.html
+- Play around at https://api-ldej-nl.el.r.appspot.com/swagger/index.html
 - Create a unit test for your HTTP client
     - simulate server behaviour using `httptest`
     - create one for success and one for not found
