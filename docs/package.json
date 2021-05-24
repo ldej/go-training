@@ -4,7 +4,7 @@
   "description": "The presentation for the go-training",
   "main": "index.js",
   "scripts": {
-    "start": "marp --html --watch go-training.md -o index.html",
+    "start": "marp --html --watch --bespoke.osc=false --bespoke.progress go-training.md -o index.html",
     "build": "npm run build:html && npm run build:pdf && npm run build:pptx",
     "build:html": "marp --allow-local-files --html go-training.md -o index.html",
     "build:pdf": "marp --allow-local-files --html go-training.md -o go-training.pdf",

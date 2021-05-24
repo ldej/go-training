@@ -1641,7 +1641,7 @@ func (cl *Client) GetThingOnUUID(thingUUID string) (*GetThingResponse, error) {
 
 # Exercise 9: HTTP client POST
 
-- Create a thing using HTTP POST to https://api-ldej-nl.el.r.appspot.com/thing
+- Create a thing using HTTP POST to https://api-ldej-nl.el.r.appspot.com/thing/new
 
 ```shell script
 $ curl -X POST \
@@ -1673,7 +1673,168 @@ Standard library provides API:
 
 ---
 
-# HTTP server
+# Minimal HTTP server
+
+```go
+package main
+
+import "net/http"
+
+func main() {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Hello world"))
+	})
+	http.ListenAndServe(":8080", nil)
+}
+```
+
+---
+
+# HTTP Server
+
+```go
+func main() {
+    mux := http.NewServeMux()
+    mux.HandleFunc("/thing/", GetThing)
+	if err := http.ListenAndServe(":8080", mux); err != nil {
+		log.Fatal(err)
+	}
+}
+
+type ThingResponse struct {
+	UUID  string `json:"uuid"`
+	Name  string `json:"name"`
+	Value string `json:"value"`
+}
+
+func GetThing(w http.ResponseWriter, r *http.Request) {
+	result := strings.Split(r.URL.Path, "/")
+	uuid := result[len(result)-1]
+
+	w.Header().Set("Content-Type", "application/json")
+	thingResponse := ThingResponse{
+		UUID:  uuid,
+		Name:  "example",
+		Value: "example",
+	}
+	err := json.NewEncoder(w).Encode(thingResponse)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+}
+```
+
+---
+
+# HTTP Server Router or Web framework?
+
+The standard library
+
+- No "support" for URL parameters
+- No "support" for the same route with different methods
+
+### Alternative routers
+
+- https://github.com/gorilla/mux
+- https://github.com/go-chi/chi
+
+They are compatible with `func(w http.ResponseWriter, r *http.Request)`
+
+### Web frameworks
+
+- https://github.com/gin-gonic/gin
+- https://github.com/labstack/echo
+
+Incompatible with `func(w http.ResponseWriter, r *http.Request)`
+
+<!-- _footer: https://www.jetbrains.com/lp/devecosystem-2020/go/ -->
+
+---
+
+# HTTP Server Tests
+
+```go
+func TestServer(t *testing.T) {
+	// mock response
+	recorder := httptest.NewRecorder()
+
+	request, err := http.NewRequest(http.MethodGet, "/thing/123", nil)
+	assert.NoError(t, err)
+	request.Header.Set("Accept", "application/json")
+
+	GetThing(recorder, request)
+
+	//  verify response
+	assert.Equal(t, http.StatusOK, recorder.Code)
+
+	// decode json
+	var thing ThingResponse
+	err = json.NewDecoder(recorder.Body).Decode(&thing)
+	assert.NoError(t, err)
+
+	assert.Equal(t, "123", thing.UUID)
+}
+```
+
+---
+
+# Exercise 10: HTTP Server
+
+- Create endpoints for CreateThing, UpdateThing, DeleteThing, ListThing
+- Create tests for your HTTP endpoints
+
+---
+
+# HTTP Server with Database
+
+```go
+package db
+
+import (
+	"errors"
+	"time"
+)
+
+var (
+	ErrThingNotFound = errors.New("thing not found")
+)
+
+type DB interface {
+	GetThing(uuid string) (Thing, error)
+	CreateThing(name string, value string) (Thing, error)
+	UpdateThing(uuid string, value string) (Thing, error)
+	DeleteThing(uuid string) error
+	ListThings(offset int, limit int) ([]Thing, int, error)
+}
+
+type Thing struct {
+	UUID    string
+	Name    string
+	Value   string
+	Updated time.Time
+	Created time.Time
+}
+```
+
+---
+
+# HTTP Server with Database
+
+---
+
+# Swagger
+
+---
+
+<!-- _class: lead -->
+![bg left:40%](images/wibautstraat5.jpg)
+
+# Architecture
+
+--- 
+
+# HTTP Server
 
 Clean Architecture
 
@@ -1729,3 +1890,8 @@ __Models__
 
 ---
 
+# Libraries
+
+Validator
+
+---

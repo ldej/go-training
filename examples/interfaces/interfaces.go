@@ -29,7 +29,7 @@ func GetName(n Namer) string {
 
 func main() {
 	student := Student{name: "student"}
-	teacher := Student{name: "teacher"}
+	teacher := Teacher{name: "teacher"}
 
 	fmt.Println(GetName(student))
 	fmt.Println(GetName(teacher))
