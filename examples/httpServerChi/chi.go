@@ -15,7 +15,7 @@ func main() {
 
 	router.Get("/thing/{uuid}", GetThing)
 	//router.Post("/thing/{uuid}", UpdateThing)
-	if err := http.ListenAndServe(":8080", router); err != nil {
+	if err := http.ListenAndServe("localhost:8080", router); err != nil {
 		log.Fatal(err)
 	}
 }

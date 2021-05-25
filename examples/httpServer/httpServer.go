@@ -11,8 +11,8 @@ import (
 func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/thing/", GetThing)
-	//http.HandleFunc("/thing/", UpdateThing)
-	if err := http.ListenAndServe(":8080", mux); err != nil {
+	// For Windows users: use localhost:8080 instead of :8080 to prevent a security message
+	if err := http.ListenAndServe("localhost:8080", mux); err != nil {
 		log.Fatal(err)
 	}
 }

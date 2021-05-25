@@ -13,7 +13,7 @@ func main() {
 
 	e.GET("/thing/{uuid}", GetThing)
 	//e.PUT("/thing/{uuid}", UpdateThing)
-	if err := e.Start(":8080"); err != nil {
+	if err := e.Start("localhost:8080"); err != nil {
 		log.Fatal(err)
 	}
 }
