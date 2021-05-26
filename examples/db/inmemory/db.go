@@ -64,3 +64,7 @@ func (s *service) DeleteThing(uuid string) error {
 func (s *service) ListThings(offset int, limit int) ([]db.Thing, int, error) {
 	return s.things[offset : offset+limit], len(s.things), nil
 }
+
+func (s *service) GetSize() int {
+	return len(s.things)
+}
