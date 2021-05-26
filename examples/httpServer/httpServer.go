@@ -26,6 +26,7 @@ type ThingResponse struct {
 	Created time.Time `json:"created"`
 }
 
+// GetThing is called an endpoint, a handler, or view
 func GetThing(w http.ResponseWriter, r *http.Request) {
 	// TODO Which method? GET, POST, PUT?
 

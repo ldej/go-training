@@ -12,7 +12,7 @@ type service struct {
 	things []db.Thing
 }
 
-func NewDB() *service {
+func NewDB() db.DB {
 	return &service{things: []db.Thing{{UUID: "special", Name: "Laurence", Value: "Coffee"}}}
 }
 
@@ -65,6 +65,6 @@ func (s *service) ListThings(offset int, limit int) ([]db.Thing, int, error) {
 	return s.things[offset : offset+limit], len(s.things), nil
 }
 
-func (s *service) GetSize() int {
-	return len(s.things)
+func (s *service) GetSize() (int, error) {
+	return len(s.things), nil
 }

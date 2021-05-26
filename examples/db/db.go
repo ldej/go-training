@@ -15,7 +15,7 @@ type DB interface {
 	UpdateThing(uuid string, value string) (Thing, error)
 	DeleteThing(uuid string) error
 	ListThings(offset int, limit int) ([]Thing, int, error)
-	GetSize() int
+	GetSize() (int, error)
 }
 
 type Thing struct {
