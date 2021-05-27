@@ -21,11 +21,19 @@ func main() {
 type server struct {
 	router *mux.Router
 	db     db.DB
+
+	apiKey string
+
+	user string
+	pass string
 }
 
 func NewServer(db db.DB) *server {
 	s := &server{
-		db: db,
+		db:     db,
+		apiKey: "secret",
+		user:   "user",
+		pass:   "pass",
 	}
 	s.Routes()
 	return s
@@ -38,6 +46,18 @@ func (s *server) Routes() {
 	s.router.HandleFunc("/thing/{uuid}", s.GetThing).Methods(http.MethodGet)
 	s.router.HandleFunc("/thing/{uuid}", s.UpdateThing).Methods(http.MethodPut) // PUT is for idempotent operations
 	s.router.HandleFunc("/thing/{uuid}", s.DeleteThing).Methods(http.MethodDelete)
+
+	token := s.router.PathPrefix("/token").Subrouter()
+	token.Use(s.APIKeyMiddleware)
+	token.HandleFunc("/thing", s.ListThings)
+
+	basic := s.router.PathPrefix("/basic").Subrouter()
+	basic.Use(s.BasicAuthMiddleware)
+	basic.HandleFunc("/thing", s.ListThings)
+
+	custom := s.router.PathPrefix("/custom").Subrouter()
+	custom.Use(s.CustomAuthMiddleware)
+	custom.HandleFunc("/thing", s.ListThings)
 }
 
 func (s *server) ListenAndServe(addr string) {
