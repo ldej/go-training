@@ -33,10 +33,11 @@ func NewServer(db db.DB) *server {
 
 func (s *server) Routes() {
 	s.router = mux.NewRouter()
-	s.router.HandleFunc("/thing/new", s.CreateThing)
-	s.router.HandleFunc("/thing/{uuid}", s.GetThing)
-	s.router.HandleFunc("/thing/{uuid}", s.UpdateThing)
-	s.router.HandleFunc("/thing/{uuid}", s.DeleteThing)
+	s.router.HandleFunc("/thing", s.ListThings).Methods(http.MethodGet)
+	s.router.HandleFunc("/thing/new", s.CreateThing).Methods(http.MethodPost) // POST is non-idempotent
+	s.router.HandleFunc("/thing/{uuid}", s.GetThing).Methods(http.MethodGet)
+	s.router.HandleFunc("/thing/{uuid}", s.UpdateThing).Methods(http.MethodPut) // PUT is for idempotent operations
+	s.router.HandleFunc("/thing/{uuid}", s.DeleteThing).Methods(http.MethodDelete)
 }
 
 func (s *server) ListenAndServe(addr string) {
@@ -165,6 +166,15 @@ func (s *server) ListThings(w http.ResponseWriter, r *http.Request) {
 	offset := 0
 	if page > 1 {
 		offset = (page - 1) * limit
+	}
+
+	size, err := s.db.GetSize()
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	if limit > size {
+		limit = size
 	}
 
 	things, count, err := s.db.ListThings(offset, limit)
