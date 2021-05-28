@@ -8,6 +8,8 @@ import (
 	"github.com/google/uuid"
 )
 
+var _ db.DB = (*service)(nil)
+
 type service struct {
 	things []db.Thing
 }

@@ -1,7 +1,6 @@
 package sqlite3
 
 import (
-	"os"
 	"testing"
 
 	"github.com/ldej/go-training/examples/db"
@@ -14,8 +13,7 @@ type Suite struct {
 }
 
 func (s *Suite) SetupSuite() {
-	testFilename := "./test-sqlite3.db"
-	_ = os.Remove(testFilename)
+	testFilename := ":memory:"
 	var err error
 	s.db, err = NewDB(testFilename)
 	s.NoError(err)

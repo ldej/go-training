@@ -11,6 +11,8 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+var _ db.DB = (*service)(nil)
+
 type service struct {
 	db *sql.DB
 }
