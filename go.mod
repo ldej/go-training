@@ -8,7 +8,7 @@ require (
 	github.com/golang/mock v1.4.0
 	github.com/google/uuid v1.1.1
 	github.com/gorilla/mux v1.8.0
-	github.com/labstack/echo/v4 v4.3.0
+	github.com/labstack/echo/v4 v4.9.0
 	github.com/mattn/go-sqlite3 v1.14.7
-	github.com/stretchr/testify v1.5.1
+	github.com/stretchr/testify v1.7.0
 )
